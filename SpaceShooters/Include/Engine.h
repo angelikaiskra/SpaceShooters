@@ -27,6 +27,7 @@ private:
 
 	//Init Bullets
 	std::vector<CBullet> bullets;
+	std::vector<CBullet> bulletsEnemy;
 
 	// Init Enemy
 	std::vector<CEnemy> enemies;

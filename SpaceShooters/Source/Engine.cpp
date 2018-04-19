@@ -21,7 +21,7 @@ void CEngine::makeExplosion(sf::Vector2f &position)
 	explosionSprite.setTexture(explosionTex);
 	explosionSprite.setPosition(position);
 }
- 
+
 void CEngine::update()
 {
 	player.update();
@@ -69,6 +69,29 @@ void CEngine::update()
 		}
 	}
 
+	//Bullets Enemy
+	for (size_t i = 0; i < bulletsEnemy.size(); i++)
+	{
+		//Move bullets
+		bulletsEnemy[i].shape.move(0.f, 6.5f);
+
+		//Out of window bounds
+		if (bulletsEnemy[i].shape.getPosition().y < 0)
+		{
+			bulletsEnemy.erase(bulletsEnemy.begin() + i);
+			break;
+		}
+
+		if (player.getSprite().getGlobalBounds().intersects(bulletsEnemy[i].shape.getGlobalBounds()))
+		{
+			player.HP--;
+
+			bulletsEnemy.erase(bulletsEnemy.begin() + i);
+			break;
+		}
+	}
+
+
 	//Enemy
 	if (player.enemySpawnTimer < 60)
 		player.enemySpawnTimer++;
@@ -76,13 +99,17 @@ void CEngine::update()
 	//Enemy spawn
 	if (player.enemySpawnTimer >= 60)
 	{
-		enemies.push_back(CEnemy(&enemyTex, window.getSize())); 
+		enemies.push_back(CEnemy(&enemyTex, window.getSize()));
 		player.enemySpawnTimer = 0;
 	}
 
 	for (size_t i = 0; i < enemies.size(); i++)
 	{
-		enemies[i].shape.move(0.f, 6.f);
+		enemies[i].shape.move(0.f, 5.f);
+
+		if (enemies[i].shape.getPosition().y < 20) {
+			bulletsEnemy.push_back(CBullet(&bulletTex, (enemies[i].shape.getPosition() + sf::Vector2f(44, 20))));
+		}
 
 		if (enemies[i].shape.getPosition().y >= window.getSize().y)
 		{
@@ -97,6 +124,7 @@ void CEngine::update()
 			player.HP--;
 			break;
 		}
+
 	}
 
 	//UI Update
@@ -116,6 +144,11 @@ void CEngine::draw()
 	for (int i = 0; i < bullets.size(); i++)
 	{
 		window.draw(bullets[i].shape);
+	}
+
+	for (int i = 0; i < bulletsEnemy.size(); i++)
+	{
+		window.draw(bulletsEnemy[i].shape);
 	}
 
 	//enemy
@@ -158,7 +191,7 @@ void CEngine::start()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-	    update();
+		update();
 		draw();
 	}
 }
