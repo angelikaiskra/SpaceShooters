@@ -10,10 +10,12 @@ public:
 	sf::Text scoreText;
 	sf::Text gameOverText;
 
+	sf::Texture heartTex;
 
 	CUI();
 
 	void update();
+	sf::Sprite drawHeart(int number);
 
 	~CUI();
 };

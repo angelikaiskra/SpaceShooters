@@ -6,7 +6,7 @@
 class CEnemy 
 {
 public:
-	CEnemy(sf::Texture *texture, sf::Vector2u windowSize);
+	CEnemy(sf::Texture *texture, sf::Vector2u windowSize, int HPMax);
 
 	~CEnemy();
 

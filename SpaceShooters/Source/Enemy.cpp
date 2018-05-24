@@ -1,10 +1,9 @@
 #include "../Include/Enemy.h"
 
 
-
-CEnemy::CEnemy(sf::Texture *texture, sf::Vector2u windowSize)
+CEnemy::CEnemy(sf::Texture *texture, sf::Vector2u windowSize, int HPMax)
 {
-	this->HPMax = rand() % 3 + 1; //z przedzia³u 1-3
+	this->HPMax = HPMax;
 	this->HP = this->HPMax;
 
 	this->shape.setTexture(*texture);

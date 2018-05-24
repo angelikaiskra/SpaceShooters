@@ -6,11 +6,14 @@ CEngine::CEngine()
 	window.create(sf::VideoMode(1200, 800), "Space shooters", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 
-	//playerTex.loadFromFile("Data/player.png");
-
 	backgroundText.loadFromFile("Data/space.png");
-	enemyTex.loadFromFile("Data/enemyShip.png");
+
+	enemyTex1.loadFromFile("Data/enemyShip1.png");
+	enemyTex2.loadFromFile("Data/enemyShip2.png");
+	enemyTex3.loadFromFile("Data/enemyShip3.png");
+
 	bulletTex.loadFromFile("Data/laserGreen.png");
+	bulletTexEnemy.loadFromFile("Data/laserRed.png");
 	explosionTex.loadFromFile("Data/laserGreenShot.png");
 
 	backgroundSprite.setTexture(backgroundText);
@@ -99,7 +102,17 @@ void CEngine::update()
 	//Enemy spawn
 	if (player.enemySpawnTimer >= 60)
 	{
-		enemies.push_back(CEnemy(&enemyTex, window.getSize()));
+		int HPMax = rand() % 3 + 1;
+		if (HPMax == 1) {
+			enemies.push_back(CEnemy(&enemyTex1, window.getSize(), HPMax));
+		}
+		else if (HPMax == 2) {
+			enemies.push_back(CEnemy(&enemyTex2, window.getSize(), HPMax));
+		}
+		else {
+			enemies.push_back(CEnemy(&enemyTex3, window.getSize(), HPMax));
+		}
+
 		player.enemySpawnTimer = 0;
 	}
 
@@ -108,7 +121,7 @@ void CEngine::update()
 		enemies[i].shape.move(0.f, 5.f);
 
 		if (enemies[i].shape.getPosition().y < 20) {
-			bulletsEnemy.push_back(CBullet(&bulletTex, (enemies[i].shape.getPosition() + sf::Vector2f(44, 20))));
+			bulletsEnemy.push_back(CBullet(&bulletTexEnemy, (enemies[i].shape.getPosition() + sf::Vector2f(44, 20))));
 		}
 
 		if (enemies[i].shape.getPosition().y >= window.getSize().y)
@@ -129,6 +142,9 @@ void CEngine::update()
 
 	//UI Update
 	UI.scoreText.setString("Score: " + std::to_string(player.score));
+
+	UI.drawHeart(player.score);
+	
 
 }
 
@@ -165,10 +181,7 @@ void CEngine::draw()
 	if (player.HP <= 0)
 	{
 		window.draw(UI.gameOverText);
-		//Sleep(5000);
-		//exit(0);
 	}
-
 
 	window.display();
 

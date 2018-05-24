@@ -14,8 +14,13 @@ private:
 
 	//Init textures
 	sf::Texture playerTex;
-	sf::Texture enemyTex;
+
+	sf::Texture enemyTex1;
+	sf::Texture enemyTex2;
+	sf::Texture enemyTex3;
+
 	sf::Texture bulletTex;
+	sf::Texture bulletTexEnemy;
 	sf::Texture backgroundText;
 	sf::Texture explosionTex;
 
